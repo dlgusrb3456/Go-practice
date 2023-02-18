@@ -78,4 +78,15 @@ func main() {
 
 	}
 
+	{
+		//string은 포인터 변수와 len으로 이루어진 구조체이다.
+
+		var str2 string
+		str := "asdf"
+		str2 = str             // 대입시 str이 가리키는 메모리와 같은 영역을 str2도 가리킨다.
+		str = "fda"            // 그럼 str2의 값도 이렇게 하면 바껴야 한다.
+		fmt.Println(str, str2) // fda asdf 가 출력된다... 왜?
+		// string은 immutable하기 때문에 값이 변할때마다 새롭게 주소를 할당하기 때문임. (새로운 값을 넣는 순간 두 변수가 가리키는 메모리 주소가 달라짐.)
+	}
+
 }
