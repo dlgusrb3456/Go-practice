@@ -43,8 +43,43 @@ func main() {
 
 	{
 		//객체로의 진!! 화!!
-		// 객체란 데이터(state)와 기능(Function)을 묶은 것이다.
+		// 객체란 데이터(state)와 기능(Function)을 묶은 것이다. low coupling high cohension
+		// oop에서 말하는 object란 Data와 Function을 묶은 것 이라고 생각한다.
+		// 즉 func (s *Student) SendReport (p *Professor, r *Report) ==> Student와 Professor Student와 Report 사이의 관계를 SendReport를 통해 정의한다. 즉, 객체와 객체간의 관계를 정의한게 method이다.
 	}
+
+	{
+		A := account1{100, "Lee", "Hyun"}
+		A.withdrawPointer(10)
+		fmt.Println(A.balance) // 90
+		A.withdrawValue(10)
+		fmt.Println(A.balance) // 90
+
+		withdrawPointer2(&A, 10)
+	}
+
+	{
+		// 함수 인자로 포인터를 사용할 때와 value를 사용할 때의 차이...
+		// 구조체의 field 값을 변경해도 구조체의 본질 자체가 변하는 것이 아니라면 포인터를 사용한다. (학생 구조체에서 학생의 나이를 하나 증가시킨다고 해서 학생이 다른 학생이 되는것이 아닌 것과 같음)
+		// 하지만 Temperature와 같이 값 변경마다 본질적인 의미가 변하는 것이라면 value를 사용하는 것이 좋다.
+
+		// 그리고 Go에서는 생성자, 소멸자 개념이 없다. 상속도 없다...
+		vip := VipUser{User{"Lee"}, 2}
+		fmt.Println(vip.userName()) // embedded field의 method도 바로 사용 가능하다.
+	}
+}
+
+type User struct {
+	name string
+}
+
+type VipUser struct {
+	User
+	Level int
+}
+
+func (user *User) userName() string {
+	return user.name
 }
 
 type account struct {
@@ -76,4 +111,20 @@ func (m *myInt) Add2(amount myInt) {
 func (m myInt) Add3(amount myInt) myInt {
 	m += amount
 	return m
+}
+
+type account1 struct {
+	balance   int
+	firstname string
+	lastname  string
+}
+
+func (a1 *account1) withdrawPointer(amount int) {
+	a1.balance -= amount
+}
+func withdrawPointer2(a1 *account1, amount int) {
+	a1.balance -= amount
+}
+func (a2 account1) withdrawValue(amount int) {
+	a2.balance -= amount
 }
