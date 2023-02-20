@@ -65,8 +65,9 @@ func main() {
 	}
 
 	{
-		// 이런 슬라이스의 동작 원리
+		// 이런 슬라이스의 동작 원리.
 		/*
+
 			type SliceHeader struct{
 				Data uintptr 	// 실제 배열을 가리키는 포인터
 				Len int			// 요소 개수
@@ -104,10 +105,11 @@ func main() {
 		fmt.Println(slice) // 기존 값이 그대로 나옴... 왜? 슬라이스는 포인터 타입 아닌가?
 		// 저 함수 안에서 append를 하면서 새로운 슬라이스를 할당하고 그 값에 append를 했기 때문에 기존의 값은 변동이 없음..
 		// 이를 해
-
+		fmt.Printf("slice memory: %p \n", slice)
 		addNum2(&slice)
-		fmt.Println(slice)
 
+		fmt.Println("addNum2:", slice)
+		fmt.Printf("slice memory: %p \n", slice)
 		// 혹은 새로운 slice를 반환한다.
 		slice = addNum3(slice) // struct가 보내짐. data, len, cap 24 바이트. => 주소만 넘기는(8바이트만 넘기는) 것보다 효율이 안좋아진다고 느껴지겠지만 사실상 별 차이 없음
 		// 그래서 보통 이렇게 쓰는걸 선호함. 이렇게 쓰는게 slice를 slice답게 쓰는 것임. slice는 값타입이기 때문에 걍 값으로 써라...
@@ -265,7 +267,7 @@ func addNum(slice []int) {
 
 func addNum2(slice *[]int) {
 	// 이건 적용됨
-	*slice = append(*slice, 4) // 이건 됨
+	*slice = append(*slice, 4, 5, 6) // 이건 됨
 }
 
 func addNum3(slice []int) []int { // 값을 리턴해 버리는 방법
