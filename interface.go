@@ -69,6 +69,25 @@ func main() {
 		//인스턴스 사이즈. [인스턴스 메모리 주소][타입 정보] 로 구성됨. (8byte 주소크기)(8바이트 타입 정보) 도합 16바이트로 interface는 구성됨.
 		// u = User{}, stringer(인터페이스) = u 라고 하면 [u변수][User타입]
 	}
+
+	{
+		// 빈인터페이스
+		// interface {} => 메소드가 없는 인터페이스
+		// => 모든 타입이 가능
+		PrintVal(10)
+		PrintVal(3.14)
+		PrintVal(Student{"hihi", 10})
+	}
+
+	{
+		//인터페이스 타입 변환
+		/*
+			var a Interface
+			t,err := a.(concreteType)
+			보다 구체적인 타입으로 변환 가능
+		*/
+
+	}
 }
 
 type ExInterface interface { // interface 예시
@@ -96,4 +115,16 @@ func (s Student) getAge() string {
 
 func (s Student) getName() string {
 	return fmt.Sprintln(s.name) // Sprintf => 반환 타입이 String이다
+}
+
+// 빈 인터페이스
+func PrintVal(v interface{}) { //어느 타입이든 들어올 수 있음.
+	switch t := v.(type) {
+	case int:
+		fmt.Println("type is int", t)
+	case float64:
+		fmt.Println("type is float64", t)
+	default:
+		fmt.Println("no support type", t)
+	}
 }
