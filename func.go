@@ -55,3 +55,8 @@ func main() {
 	printNo(10)
 
 }
+
+/*
+	함수에 인자로 넘기는 모든 값은 call by value로 넘어간다. 즉 Rvalue로 넘어간다.
+	그래서 만약 array를 넘긴다면 array를 이루는 구조체를 넘기는 것이고, slice를 넘긴다면 sclice의 구조체를 넘기는 것이다.
+*/
