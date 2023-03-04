@@ -72,6 +72,9 @@ func main() {
 		})
 
 	}
+	{
+		fmt.Println(Compose(sin, cos))
+	}
 }
 
 type Writer func(string)

@@ -43,7 +43,7 @@ func main() {
 	{
 		// 덕타이핑! : 어떤 새를 봤는데 그 새가 오리처럼 걷고, 오리처럼 날고, 오리처럼 소리내면 나는 그 새를 오리라고 부르겠다.
 		// Go나 python은 덕타이핑을 제공함.
-		// 자바의 interface같은 경우 패키지 내부에서 interface를 정의하고 구조체에 impliment로 붙이는
+		// 자바의 interface같은 경우 패키지 내부에서 interface를 정의하고 구조체에 implement로 붙이는
 		/*	(패키지 쪽에서 정의함)
 			type Sender interface{
 				Send(string)

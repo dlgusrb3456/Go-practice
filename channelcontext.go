@@ -259,3 +259,15 @@ func PrintEverySecond(ctx context.Context) {
 		}
 	}
 }
+
+type Work struct {
+	x, y, z int
+}
+
+func worker(in <-chan *Work, out chan<- *Work) {
+	for w := range in {
+		w.z = w.x * w.y
+		time.Sleep(time.Duration(w.z) * time.Second)
+		out <- w
+	}
+}
