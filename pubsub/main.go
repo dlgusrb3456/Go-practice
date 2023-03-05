@@ -9,7 +9,7 @@ import (
 
 var wg sync.WaitGroup
 
-func main() {
+func main() { // go run은 컴파일 없이 수행되기 때문에 오류를 뱉음.
 	ctx, cancel := context.WithCancel(context.Background())
 	wg.Add(4)
 	publisher := NewPublisher(ctx)

@@ -15,7 +15,7 @@ func Map[F, T any](s []F, f func(F) T) []T {
 }
 
 func main() {
-	fmt.Println("Generic #2")
+	fmt.Println("Generic #2, Generic function")
 
 	doubled := Map([]int{1, 2, 3}, func(v int) int {
 		return v * 2
