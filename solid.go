@@ -37,6 +37,40 @@ func main() {
 		경제리포트 생성, 경제리포트 전송 / 사회리포트 생성, 사회리포트 전송 ... => 이런식으로 모든 리포트마다 따로 만들면 재사용성이 떨어짐
 		리포트 인터페이스 생성, 리포트전송 함수 생성, 리포트 인터페이스 메소드 구현한 각 리포트 타입 생성 => 재사용성이 좋음 & 전송은 리포트를 전송만, 인터페이스는 생성만 담당함. => 각각의 기능이 완전히 분리됨
 		*/
+		type FinanceReport struct{ //보고서
+			report string
+		}
+
+		func (r *FinanceReport) SendReport(email string){ //보고서 전송
+			fmt.Println("send",email)
+		}
+
+		type MarketingReport struct{ //보고서
+			report string
+		}
+
+		func (r *MarketingReport) SendReport(email string){ //보고서 전송 => 보고서를 전송하는 기능은 동일하지만 따로 만들어줘야 하는 불편함이 존재함.
+			fmt.Println("send",email)
+		}
+
+		// To solve this problem. 보고서와 보고서 전송을 분리해야함.
+		type Report interface{
+			Report() string
+		}
+
+		type FinanceReport struct{
+			report string
+		}
+		func (r *FinanceReport) Report() string{
+			return r.report
+		}
+		type ReportSender struct{
+
+		}
+
+		func (s *ReportSender) SendReport(report Report){
+
+		}
 	}
 	{
 		/*
@@ -57,7 +91,7 @@ func main() {
 			이를 OCP에 맞게 구현하기 위해선 각각의 경우를 따로 구현해야함. 여기서도 interface를 통해 구현함
 
 			type ReportSender interface{
-				Sender(r *Report)
+				Send(r *Report)
 			}
 
 			type EmailSender struct{
