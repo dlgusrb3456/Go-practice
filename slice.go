@@ -35,7 +35,7 @@ func main() {
 		// 슬라이스 초기화
 		var slice1 = []int{1, 2, 3}
 		var slice2 = []int{1, 5: 2, 10: 3}
-		fmt.Println(slice1, slice2)
+		fmt.Println("what?", slice1, slice2)
 
 		// Make를 이용한 초기화
 		var slice3 = make([]int, 3) // => 요소 개수 3개를 갖는 슬라이스. 3개는 기본 값인 0으로 초기화 됨
@@ -59,9 +59,40 @@ func main() {
 		// 요소 추가 - append()
 		var slice = []int{1, 2, 3}
 		slice2 := append(slice, 4) // 기존의 slice에서 4를 추가해 반환해준다.
-
-		fmt.Println(slice2)
+		slice2 = append(slice2, 5, 6, 7, 8)
+		slice2 = append(slice2, slice2...)
+		fmt.Println("slice2::!!!", slice2)
 		//여러개추가도 가능함! 4,5,6,7,8 이런 식으로!
+	}
+
+	{
+		fmt.Println("Test 1")
+		var s []int
+		a := [5]int{1, 2, 3, 4, 5}
+		s = a[:]
+		fmt.Println(a)
+		fmt.Println(s)
+		a[0] = 120
+		fmt.Println(a)
+		fmt.Println(s)
+
+		fmt.Println("len s:", len(s), "cap s:", cap(s))
+		s1 := append(s, 3)
+		fmt.Println("len s1:", len(s1), "cap s1:", cap(s1))
+		s2 := append(s1, 4)
+		fmt.Println("len s2:", len(s2), "cap s2:", cap(s2))
+		s1[0] = 12
+		fmt.Println(s[0], s1[0], s2[0])
+		s2 = append(s2, 5)
+		fmt.Println(s1, s2)
+		s2[0] = 22
+		fmt.Println(s1, s2)
+		fmt.Println("len s1:", len(s1), "cap s1:", cap(s1))
+		fmt.Println("len s2:", len(s2), "cap s2:", cap(s2))
+		s1 = append(s1, 8)
+		fmt.Println(s1, s2)
+
+		fmt.Println()
 	}
 
 	{
@@ -101,7 +132,10 @@ func main() {
 	{
 		//흔히 하는 실수
 		slice := []int{1, 2, 3}
+		slice = append(slice, 4)
+		fmt.Println("slice info1: ", len(slice), cap(slice))
 		addNum(slice)
+		fmt.Println("slice info2: ", len(slice), cap(slice))
 		fmt.Println(slice) // 기존 값이 그대로 나옴... 왜? 슬라이스는 포인터 타입 아닌가?
 		// 저 함수 안에서 append를 하면서 새로운 슬라이스를 할당하고 그 값에 append를 했기 때문에 기존의 값은 변동이 없음..
 		// 이를 해
@@ -261,13 +295,18 @@ func (s Students) Swap(i, j int) {
 }
 
 func addNum(slice []int) {
-	slice[0] = 10            // 이건 적용됨
-	slice = append(slice, 4) // 이건 안됨
+	slice[0] = 10              // 이건 적용됨
+	slice = append(slice, 4)   // 이건 안됨. 된게 맞는데 len, cap의 값의 변경에 대한 부분은 적용이 안되므로 보이지 않음.
+	slice2 := append(slice, 5) // 이건 안됨
+
+	fmt.Println("slice info1.5: ", len(slice), cap(slice))
+	fmt.Println("slice2 info1.5: ", len(slice2), cap(slice2))
+
 }
 
 func addNum2(slice *[]int) {
 	// 이건 적용됨
-	*slice = append(*slice, 4, 5, 6) // 이건 됨
+	*slice = append(*slice, 4, 5, 6) // 이건 됨. len, cap도 변함
 }
 
 func addNum3(slice []int) []int { // 값을 리턴해 버리는 방법
