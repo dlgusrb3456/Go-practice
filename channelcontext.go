@@ -45,8 +45,10 @@ func main() {
 		// 이유는 ch 에 9를 넣었지만, 가져가는 애가 없어서 무한히 대기하기 때문임
 		//ch := make(chan int) // 문제
 		// ch := make(chan int, 2) // 하지만 이렇게 큐에 사이즈를 줘서 빈공간을 만들어주면 대기하지 않고 종료됨. 즉, 빈공간이 없이 재고가 쌓이면 대기함.
-		// go square2()
+		// go square2(ch)
 		// ch <- 9
+		// ch <- 10
+		// ch <- 11
 		// fmt.Println("is it print?")
 	}
 	{
@@ -58,8 +60,8 @@ func main() {
 		// for i := 0; i < 10; i++ {
 		// 	ch <- i * 2
 		// }
-		// // => 무한 대기 함수에서 wg.done으로 넘어가지 않아 메인 고루틴과, square3 고루틴이 deadlock에 빠져버림
-		// // 이를 해결하기 위해 close()로 채널을 닫아준다.
+		// // // => 무한 대기 함수에서 wg.done으로 넘어가지 않아 메인 고루틴과, square3 고루틴이 deadlock에 빠져버림
+		// // // 이를 해결하기 위해 close()로 채널을 닫아준다.
 		// close(ch) // => 채널에 데이터를 보내줬으니 이제 닫아줌. 좀비 고루틴 방지.
 		// wg.Wait()
 	}
@@ -105,26 +107,26 @@ func main() {
 	{
 		//컨텍스트. 작업을 지시할 때 작업 가능 시간, 작업 취소 등의 조건을 지시할 수 있는 작업 명세서 역할
 		// 고루틴에다가 명세서를 넘겨 실행하게 하는 듯.
-		// wgContext.Add(1)
-		// ctx, cancel := context.WithCancel(context.Background()) // ❶ 컨텍스트 생성. 기본 컨텍스트 위에 덮어쓰는 구조. Cancel 할 수 있는 기능을 추가해줌
-		// go PrintEverySecond(ctx)
-		// time.Sleep(5 * time.Second)
-		// cancel() // ❷ 취소
+		wgContext.Add(1)
+		ctx, cancel := context.WithCancel(context.Background()) // ❶ 컨텍스트 생성. 기본 컨텍스트 위에 덮어쓰는 구조. Cancel 할 수 있는 기능을 추가해줌
+		go PrintEverySecond(ctx)
+		time.Sleep(5 * time.Second)
+		cancel() // ❷ 취소
 
-		// wgContext.Wait()
+		wgContext.Wait()
 	}
 	{
 		//컨텍스트로 작업 시간 설정
 		// ctx, cancel := context.WithTimeout(context.Background(),3*time.Second) => 3초 뒤에 Done 시그널 알아서 발생
 
 		// 컨텍스트로 특정 값 지정 가능, key-value로 값 가져오는 듯
-		wgSquare.Add(1)
-		ctx := context.WithValue(context.Background(), "number1", 9) // ❶ 컨텍스트에 값을 추가한다
-		// 컨텍스트 랩핑. 여러 데이터를 넣을 수 있음
-		ctx = context.WithValue(ctx, "number2", 10)
-		ctx = context.WithValue(ctx, "keyword", "Lilly")
-		go square5(ctx)
-		wgSquare.Wait()
+		// wgSquare.Add(1)
+		// ctx := context.WithValue(context.Background(), "number1", 9) // ❶ 컨텍스트에 값을 추가한다
+		// // 컨텍스트 랩핑. 여러 데이터를 넣을 수 있음
+		// ctx = context.WithValue(ctx, "number2", 10)
+		// ctx = context.WithValue(ctx, "keyword", "Lilly")
+		// go square5(ctx)
+		// wgSquare.Wait()
 
 	}
 	{
@@ -142,7 +144,9 @@ func square(wg *sync.WaitGroup, ch chan int) {
 	wg.Done()
 }
 
-func square2() {
+func square2(ch chan int) {
+	nine := <-ch
+	fmt.Println("i take it!", nine)
 	for {
 		time.Sleep(2 * time.Second)
 		fmt.Println("sleep")
